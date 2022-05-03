@@ -11,7 +11,7 @@
                     <li class="feature">
                         Added Factor Challenge as well as more upgrades and milestones.
                     </li>
-                    <li class="fix">Make point gain format better</li>
+                    <li class="fix">Make point gain format better.</li>
                 </ul>
             </details>
             <details open>
