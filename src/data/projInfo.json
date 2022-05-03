@@ -1,23 +1,23 @@
 {
-	"title": "Profectus",
-	"id": "profectus",
-	"author": "thepaperpilot",
-	"discordName": "The Paper Pilot Community",
-	"discordLink": "https://discord.gg/WzejVAx",
+    "title": "The Number Tree",
+    "id": "num",
+    "author": "3^3=7",
+    "discordName": "My server",
+    "discordLink": "https://discord.gg/tbpS5SPKX8",
 
-	"versionNumber": "0.0",
-	"versionTitle": "Initial Commit",
+    "versionNumber": "0.0.2",
+    "versionTitle": "More things!",
 
-	"allowGoBack": true,
-	"defaultShowSmall": false,
-	"defaultDecimalsShown": 2,
-	"useHeader": true,
-	"banner": null,
-	"logo": "",
-	"initialTabs": [ "main" ],
+    "allowGoBack": true,
+    "defaultShowSmall": false,
+    "defaultDecimalsShown": 2,
+    "useHeader": true,
+    "banner": null,
+    "logo": "",
+    "initialTabs": [ "main" ],
 
-	"maxTickLength": 3600,
-	"offlineLimit": 1,
-	"enablePausing": true,
-	"saveEncoding": "lz"
+    "maxTickLength": 3600,
+    "offlineLimit": 1,
+    "enablePausing": true,
+    "saveEncoding": "lz"
 }

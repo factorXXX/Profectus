@@ -5,13 +5,27 @@
         </template>
         <template v-slot:body>
             <details open>
-                <summary>v0.0 Initial Commit - <time>2021-09-04</time></summary>
-                This is the first release :D
+                <summary>v0.0.2 More things! - <time>2022-05-02</time></summary>
                 <ul>
-                    <li class="feature">Did everything</li>
-                    <li class="fix">Had some fun</li>
-                    <li class="breaking">Removed everything</li>
-                    <li class="balancing">Created some bugs to fix later</li>
+                    <li class="balancing">Balanced up to 13 factors.</li>
+                    <li class="feature">
+                        Added Factor Challenge as well as more upgrades and milestones.
+                    </li>
+                    <li class="fix">Make point gain format better</li>
+                </ul>
+            </details>
+            <details open>
+                <summary>v0.0.1.1 - <time>2022-05-02</time></summary>
+                <ul>
+                    <li class="fix">Fixed some grammar problem.</li>
+                </ul>
+            </details>
+            <details open>
+                <summary>v0.0.1 Rewrite Start! - <time>2022-05-02</time></summary>
+                <ul>
+                    <li class="feature">
+                        Added Number and Factor layer, including upgrades and milestones!
+                    </li>
                 </ul>
             </details>
         </template>

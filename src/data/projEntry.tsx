@@ -1,5 +1,5 @@
 import Spacer from "components/layout/Spacer.vue";
-import { jsx } from "features/feature";
+import { jsx, Visibility } from "features/feature";
 import { createResource, trackBest, trackOOMPS, trackTotal } from "features/resources/resource";
 import { branchedResetPropagation, createTree, GenericTree } from "features/trees/tree";
 import { globalBus } from "game/events";
@@ -8,19 +8,27 @@ import player, { PlayerData } from "game/player";
 import Decimal, { DecimalSource, format, formatTime } from "util/bignum";
 import { render } from "util/vue";
 import { computed, toRaw } from "vue";
-import prestige from "./layers/prestige";
-
+import factor from "./layers/factor";
+import number from "./layers/number";
 /**
  * @hidden
  */
 export const main = createLayer("main", () => {
-    const points = createResource<DecimalSource>(10);
+    const points = createResource<DecimalSource>(0, "points", 2);
     const best = trackBest(points);
     const total = trackTotal(points);
 
     const pointGain = computed(() => {
         // eslint-disable-next-line prefer-const
         let gain = new Decimal(1);
+        if (number.up1.bought.value) gain = gain.times(4);
+        if (number.up2.bought.value) gain = gain.times(number.upgradeEffects[2].value);
+        if (number.up3.bought.value) gain = gain.times(number.upgradeEffects[3].value);
+        if (number.up9.bought.value) gain = gain.times(number.upgradeEffects[7].value);
+        if (factor.mi1.earned.value) gain = gain.times(factor.milestoneEffects[1].value);
+
+        if (factor.cha1.active.value) gain = gain.pow(0.5);
+        if (factor.cha2.active.value) gain = Decimal.pow(4, factor.points.value);
         return gain;
     });
     globalBus.on("update", diff => {
@@ -29,10 +37,22 @@ export const main = createLayer("main", () => {
     const oomps = trackOOMPS(points, pointGain);
 
     const tree = createTree(() => ({
-        nodes: [[prestige.treeNode]],
-        branches: [],
+        nodes: [[number.treeNode], [factor.treeNode]],
+        branches: () => {
+            const b = [];
+
+            if (factor.treeNode.visibility.value == Visibility.Visible) {
+                b.push({
+                    startNode: factor.treeNode,
+                    endNode: number.treeNode
+                });
+            }
+
+            return b;
+        },
+
         onReset() {
-            points.value = toRaw(this.resettingNode.value) === toRaw(prestige.treeNode) ? 0 : 10;
+            points.value = toRaw(this.resettingNode.value) === toRaw(number.treeNode) ? 0 : 10;
             best.value = points.value;
             total.value = points.value;
         },
@@ -72,10 +92,10 @@ export const main = createLayer("main", () => {
 export const getInitialLayers = (
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     player: Partial<PlayerData>
-): Array<GenericLayer> => [main, prestige];
+): Array<GenericLayer> => [main, number, factor];
 
 export const hasWon = computed(() => {
-    return false;
+    return Decimal.gte(factor.points.value, 13);
 });
 
 /* eslint-disable @typescript-eslint/no-unused-vars */

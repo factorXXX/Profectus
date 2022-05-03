@@ -4,6 +4,7 @@ import { globalBus } from "game/events";
 import { State, persistent } from "game/persistence";
 
 export interface Resource<T = DecimalSource> extends Ref<T> {
+    [x: string]: DecimalSource;
     displayName: string;
     precision: number;
     small?: boolean;
