@@ -5,6 +5,14 @@
         </template>
         <template v-slot:body>
             <details open>
+                <summary>v0.0.3 New Features! - <time>2022-05-04</time></summary>
+                <ul>
+                    <li class="balancing">Balanced up to 28 factors.</li>
+                    <li class="feature">Added Factor Calculator, a new feature!</li>
+                    <li class="feature">Added more upgrade, milestone and challenge.</li>
+                </ul>
+            </details>
+            <details open>
                 <summary>v0.0.2 More things! - <time>2022-05-02</time></summary>
                 <ul>
                     <li class="balancing">Balanced up to 13 factors.</li>

@@ -37,7 +37,8 @@ const layer = createLayer(id, () => {
                 factor.milestoneEffects[1],
                 "Factor Milestone 1",
                 factor.mi1.earned
-            )
+            ),
+            createMultiplicativeModifier(factor.cal.eff, "Factor Calculator", factor.mi4.earned)
         )
     }));
 
@@ -45,8 +46,13 @@ const layer = createLayer(id, () => {
         2: computed(() => {
             let power = new Decimal(0.4);
             if (up5.bought.value) power = power.add(0.2);
+            if (up12.bought.value) power = power.sub(0.3);
+            if (factor.mi5.earned)
+                power = power.add(Decimal.add(factor.points.value, 1).log10().times(0.1));
+            if (factor.cha4.active.value) power = power.sub(1);
             let cap = new Decimal(1000);
             if (up6.bought.value) cap = cap.times(40);
+            if (up12.bought.value) cap = cap.times(2.5e10);
             return Decimal.add(1, points.value).pow(power).min(cap);
         }),
         3: computed(() => {
@@ -171,6 +177,24 @@ const layer = createLayer(id, () => {
         resource: points,
         visibility: () => (factor.mi1.earned.value ? Visibility.Visible : Visibility.None)
     }));
+    const up11 = createUpgrade(() => ({
+        display: {
+            title: "11",
+            description: "'4' also affect point gain."
+        },
+        cost: 1e20,
+        resource: points,
+        visibility: () => (factor.mi4.earned.value ? Visibility.Visible : Visibility.None)
+    }));
+    const up12 = createUpgrade(() => ({
+        display: {
+            title: "12",
+            description: "'2' effect harpcap start later but nerf it."
+        },
+        cost: 1e25,
+        resource: points,
+        visibility: () => (factor.mi4.earned.value ? Visibility.Visible : Visibility.None)
+    }));
     const reset = createReset(() => ({
         thingsToReset: (): Record<string, unknown>[] => [layer]
     }));
@@ -205,6 +229,8 @@ const layer = createLayer(id, () => {
                 {renderRow(up1, up2, up3, up4, up5)}
                 <br />
                 {renderRow(up6, up7, up8, up9, up10)}
+                <br />
+                {renderRow(up11, up12)}
             </>
         )),
         treeNode,
@@ -218,6 +244,8 @@ const layer = createLayer(id, () => {
         up8,
         up9,
         up10,
+        up11,
+        up12,
         upgradeEffects
     };
 });

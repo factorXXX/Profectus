@@ -7,7 +7,7 @@ import { createLayer, GenericLayer } from "game/layers";
 import player, { PlayerData } from "game/player";
 import Decimal, { DecimalSource, format, formatTime } from "util/bignum";
 import { render } from "util/vue";
-import { computed, toRaw } from "vue";
+import { computed, toRaw, unref } from "vue";
 import factor from "./layers/factor";
 import number from "./layers/number";
 /**
@@ -25,10 +25,14 @@ export const main = createLayer("main", () => {
         if (number.up2.bought.value) gain = gain.times(number.upgradeEffects[2].value);
         if (number.up3.bought.value) gain = gain.times(number.upgradeEffects[3].value);
         if (number.up9.bought.value) gain = gain.times(number.upgradeEffects[7].value);
+        if (number.up11.bought.value) gain = gain.times(number.upgradeEffects[4].value);
         if (factor.mi1.earned.value) gain = gain.times(factor.milestoneEffects[1].value);
 
-        if (factor.cha1.active.value) gain = gain.pow(0.5);
-        if (factor.cha2.active.value) gain = Decimal.pow(4, factor.points.value);
+        if (factor.cha2.active.value || factor.cha3.active.value)
+            gain = Decimal.pow(4, factor.points.value);
+        if (factor.cha3.active.value || factor.cha3.completions.value)
+            gain = gain.times(unref(factor.cal.eff));
+        if (factor.cha1.active.value || factor.cha3.active.value) gain = gain.pow(0.5);
         return gain;
     });
     globalBus.on("update", diff => {
@@ -95,7 +99,7 @@ export const getInitialLayers = (
 ): Array<GenericLayer> => [main, number, factor];
 
 export const hasWon = computed(() => {
-    return Decimal.gte(factor.points.value, 13);
+    return Decimal.gte(factor.points.value, 28);
 });
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
